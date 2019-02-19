@@ -21,6 +21,9 @@ public class ReachDistance extends Command {
   boolean check = false;
 
   public ReachDistance(double d) {
+
+    setTimeout(3.5);
+
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     distance = d;
@@ -46,7 +49,7 @@ public class ReachDistance extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return distancePID.onTarget();
+    return isTimedOut()/*distancePID.onTarget()*/;
   }
 
   // Called once after isFinished returns true

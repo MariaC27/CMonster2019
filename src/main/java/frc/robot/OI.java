@@ -70,6 +70,7 @@ public class OI {
     
     setDistance = new JoystickButton(logitech, 1); //check these buttons
     setAngle = new JoystickButton(logitech, 2); //check these buttons 
+    
     shootHatch = new JoystickButton(logitech, 6);
     retractHatch = new JoystickButton(logitech, 8);
     launchCatapultButton = new JoystickButton(logitech, 5);

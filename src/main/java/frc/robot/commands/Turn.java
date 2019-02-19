@@ -22,6 +22,8 @@ public class Turn extends Command {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
 
+    setTimeout(2.5);
+
     angle = a;
   }
 
@@ -43,7 +45,8 @@ public class Turn extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return headingPID.onTarget();
+    return isTimedOut()/*headingPID.onTarget()*/;
+    //have time out so can return to driver control even if PIDs don't finish
   }
 
   // Called once after isFinished returns true

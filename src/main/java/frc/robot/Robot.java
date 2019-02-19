@@ -103,10 +103,6 @@ public class Robot extends TimedRobot {
     visionMap.put(10, 25.0);
 //VISION PROCESSING CALCULATIONS:
 
-
-  
-
-
 //display the data from the pixy
   SmartDashboard.putNumber("pixyX0DistanceMethod", pixyX0);
   SmartDashboard.putNumber("pixyX1DistanceMethod", pixyX1);
@@ -116,8 +112,10 @@ public class Robot extends TimedRobot {
 
 
 //DISTANCE CALCULATIONS
-  double centerXnonABS = pixyX1 - pixyX0;
+  double centerXnonABS = pixyX1 - pixyX0; 
+  //calculate the horizontal pixel distance between the targets 
   centerXDifference =  Math.abs(centerXnonABS);
+  //make sure the value is positive 
 
   SmartDashboard.putNumber("centerXDifferentDistance", centerXDifference);
 
@@ -140,10 +138,14 @@ if(centerXDifference < visionMap.get(visionMap.size() -1)){
 
 //can do -1 here because of preliminary check up top 
 for (int i = 0; i < visionMap.size() - 1; i++){
-  compare = centerXDifference - visionMap.get(i);
+  compare = centerXDifference - visionMap.get(i); 
+  //find difference between the calculated difference and the specific value from the hashmap
   double compareABS = Math.abs(centerXDifference - visionMap.get(i));
+  //make sure this value is positive 
 
 
+  //see if the difference is the smallest difference yet, finding the index of the 
+  //hash map that the difference is closest to
         if (compareABS < smallest){
              smallest = compareABS;
               indexOfCenter = i;
@@ -155,14 +157,17 @@ for (int i = 0; i < visionMap.size() - 1; i++){
   SmartDashboard.putNumber("Smallest", smallest);
   SmartDashboard.putNumber("IndexOfCenter", indexOfCenter);
 
-
+//now 2 an if-else statement (use the non abs value compare) to see on which side of the index
+//the value is closest to. Compare is less than zero means it is on the closest below the index 
   if (compare < 0){
-    indexOfAdjacent = indexOfCenter -1;
+    indexOfAdjacent = indexOfCenter -1; //get the adjacent value below 
     double upper = visionMap.get(indexOfCenter);
     double lower = visionMap.get(indexOfAdjacent);
+    //upper and lower indexes in the hashmap - which 2 it is between 
 
 
-      //new linear interpolation 
+      //new linear interpolation - make a linear approximation between the two points
+      //to see where on the line the value is  
       m = (lower - upper) / (indexOfAdjacent - indexOfCenter);
       b = upper - (m * indexOfCenter);
       actualRobotDistance = (centerXDifference - b)/m;
@@ -174,12 +179,13 @@ for (int i = 0; i < visionMap.size() - 1; i++){
 
   }
 
+  //else compare is greater than zero, means the value is closest above the index 
     else {
-        indexOfAdjacent = indexOfCenter +1;
-        double upper = visionMap.get(indexOfAdjacent); //causing crash when add one 
+        indexOfAdjacent = indexOfCenter +1; //adjacent is above 
+        double upper = visionMap.get(indexOfAdjacent);  
         double lower = visionMap.get(indexOfCenter);
 
-
+        //linear interpolation 
         m = (upper - lower)/(indexOfAdjacent - indexOfCenter);
         b = lower - (m * indexOfCenter);
         actualRobotDistance = (centerXDifference - b) / m;
@@ -189,7 +195,8 @@ for (int i = 0; i < visionMap.size() - 1; i++){
       SmartDashboard.putNumber("lower", lower);
     }
 
-
+    //distance setpoint is one foot less than the actual distance to make up
+    //for bumpers and hatch shooting distance 
     distanceSetpoint = actualRobotDistance - optimalRobotDistance;
 
         SmartDashboard.putNumber("actualRobotDistance", actualRobotDistance);
@@ -212,11 +219,13 @@ for (int i = 0; i < visionMap.size() - 1; i++){
 
 
 
-    //for use with angle calculations 
+    //for use with angle calculations'
+    //constants  
     double PIXY_FOV_DEGREES = 75; //got from website 
     double IMAGE_WIDTH_PIXELS = 320; //got from website
     double DEGREES_PER_PIXEL = PIXY_FOV_DEGREES / IMAGE_WIDTH_PIXELS; //degrees per pixel is the constant to modify by 
-    double optimalCenterXPixel = 160; //change as calibrated
+    double optimalCenterXPixel = 160; //the actual center pixel of the image 
+
     double imgCenterXPixel;
     double centerPixelDifference;
     double headingSetpoint; //thing to set the PID setpoint to 
@@ -234,6 +243,7 @@ for (int i = 0; i < visionMap.size() - 1; i++){
       //ANGLE CALCULATIONS 
       imgCenterXPixel = (pixyX0 + pixyX1)/2;  //pixel in the center of the two targets
       SmartDashboard.putNumber("imgCenterPixel", imgCenterXPixel);
+
       centerPixelDifference = imgCenterXPixel - optimalCenterXPixel; 
       SmartDashboard.putNumber("centerPixelDifference", centerPixelDifference);
       //distance this center is from the actual center of the image 
