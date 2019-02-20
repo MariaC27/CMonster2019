@@ -22,6 +22,7 @@ import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.ReachDistance;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.*;
+import frc.robot.commands.*;
 import frc.robot.RobotMap;
 import edu.wpi.first.networktables.NetworkTable;
 import com.ctre.phoenix.motorcontrol.can.*;
@@ -39,6 +40,7 @@ import com.kauailabs.navx.frc.AHRS;
  */
 public class Robot extends TimedRobot {
   public static OI oi;
+  public static AHRS  ahrs = new AHRS(I2C.Port.kMXP, (byte) 100);
   public static ExampleSubsystem m_subsystem = new ExampleSubsystem();
   public static ReachDistance reachDistance = new ReachDistance(0);
   public static DriveBase driveBase = new DriveBase(); 
@@ -52,6 +54,9 @@ public class Robot extends TimedRobot {
   public static double pixyY0;
   public static double pixyY1;
 
+  public static double storedDistance;
+  public static double storedHeading;
+
  
   //how to use a second pcm is necessary: 
   //first parameter specifies which pcm to use
@@ -60,7 +65,7 @@ public class Robot extends TimedRobot {
   //wire second pcm into pdp with smaller ports with 20 amp breaker 
 
   
-  public static AHRS ahrs;
+  
 
   //auto chooser 
   Command m_autonomousCommand;
@@ -279,12 +284,15 @@ for (int i = 0; i < visionMap.size() - 1; i++){
    
   
    
-    ahrs = new AHRS(I2C.Port.kMXP, (byte) 100);
+   
 
     SmartDashboard.putNumber("navXYaw", ahrs.getYaw());
    //need to import I2C above 
    
    Robot.driveBase.enableDriveBase();
+   ahrs.reset();
+   driveBase.leftDistance = 0;
+   driveBase.rightDistance=  0; 
 
  
     //streaming camera 
@@ -336,9 +344,10 @@ for (int i = 0; i < visionMap.size() - 1; i++){
   @Override
   public void autonomousInit() {
 
-
+    ahrs.reset();
 
    driveBase.enableDriveBase();
+  
 
     m_autonomousCommand = chooser.getSelected();
 
@@ -365,6 +374,8 @@ for (int i = 0; i < visionMap.size() - 1; i++){
   @Override
   public void teleopInit() {
     driveBase.enableDriveBase();
+   
+    ahrs.reset();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -383,7 +394,7 @@ for (int i = 0; i < visionMap.size() - 1; i++){
   @Override
   public void teleopPeriodic() {
 
-    driveBase.enableDriveBase();
+   // driveBase.enableDriveBase();
     Scheduler.getInstance().run();
 
     pixyCam.read();
@@ -393,11 +404,20 @@ for (int i = 0; i < visionMap.size() - 1; i++){
   pixyY1= pixyCam.getCenterY1();
 
     //call vision methods
-    calculateDistance();
-    calculateAngle();
+    storedDistance = calculateDistance();
+    storedHeading = calculateAngle();
+
+    SmartDashboard.putNumber("distanceFromTeleopPeriodic", storedDistance);
+    SmartDashboard.putNumber("angleFromTeleopPeriodic", storedHeading);
 
     SmartDashboard.putNumber("teleopYaw", ahrs.getYaw());
     
+
+    oi.setDistance.whenPressed(new ReachDistance(Robot.calculateDistance()));
+    oi.setAngle.whenPressed(new TimedTurn(2.5, Robot.calculateAngle()));
+
+    SmartDashboard.putNumber("distanceFromOI", Robot.calculateDistance());
+    SmartDashboard.putNumber("angleFromOI", Robot.calculateAngle());
   }
 
   

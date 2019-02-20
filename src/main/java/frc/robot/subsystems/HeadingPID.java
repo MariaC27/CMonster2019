@@ -23,9 +23,9 @@ public class HeadingPID extends PIDSubsystem {
    */
   public HeadingPID() {
     // Intert a subsystem name and PID values here
-    super("HeadingPID", 0.25, 0, 0);
+    super("HeadingPID", 0.04, 0, 0);
     setAbsoluteTolerance(0.35);
-    setOutputRange(-1, 1); //can make this half speed, etc 
+    setOutputRange(-0.4, 0.4); //can make this half speed, etc 
     // Use these to get going:
     // setSetpoint() - Sets where the PID controller should move the system
     // to

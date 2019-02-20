@@ -24,7 +24,7 @@ public class ToggleQuarterSpeed extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.driveBase.toggleCheck = !Robot.driveBase.toggleCheck;
+  Robot.driveBase.joystickScale = 0.5;
     //if true, makes false and if false, makes true 
   }
 

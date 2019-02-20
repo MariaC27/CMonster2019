@@ -11,10 +11,12 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.HeadingPID;
+import com.kauailabs.navx.frc.AHRS;
 
 public class Turn extends Command {
 
   private final HeadingPID headingPID = RobotMap.headingPID;
+  private final AHRS ahrs = Robot.ahrs;
 
   private double angle = 0;
 
@@ -33,6 +35,7 @@ public class Turn extends Command {
     headingPID.enable();
     headingPID.resetPID();
     Robot.driveBase.enableDriveBase();
+    ahrs.reset();
   }
 
   // Called repeatedly when this Command is scheduled to run

@@ -23,6 +23,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.*;
+import com.kauailabs.navx.frc.AHRS;
 
 
 
@@ -46,7 +47,7 @@ public class DriveBase extends Subsystem {
   WPI_VictorSPX rightVictor = RobotMap.rightBackVictor;
  
   public boolean toggleCheck = false;
-  double joystickScale = 1;
+  public double joystickScale = 1;
 
 
   Compressor compressor = RobotMap.robotCompressor;
@@ -54,16 +55,18 @@ public class DriveBase extends Subsystem {
   double leftMotorSpeed = 0; 
   double[] returnData = new double[2];
 
-  double rightDistance = 0;
-  double leftDistance = 0;
+  public double rightDistance = 0;
+  public double leftDistance = 0;
   public static double averageDistance = 0;
-  double DISTANCE_PER_ENCODER_PULSE = (Math.PI * 0.5)/4096;  //for 6 inch wheels 
+  double DISTANCE_PER_ENCODER_PULSE = (Math.PI * 0.5)/26583;  //for 6 inch wheels 
   double VELOCITY_UNITS_PER_100MS = 6570;
 
   double moveSpeed;
   double rotateSpeed;
 
   boolean checkAuto = false;
+
+  AHRS ahrs = Robot.ahrs;
   
  
 
@@ -90,6 +93,9 @@ public class DriveBase extends Subsystem {
 
     leftDistance = 0;
     rightDistance = 0;
+    averageDistance = 0;
+    ahrs.reset();
+    
 
   }
 
@@ -103,18 +109,7 @@ public class DriveBase extends Subsystem {
 
   }
 
-  public void toggleSpeed(){
-
-    if(toggleCheck == true){
-      joystickScale = 1;
-    }
-
-    else {
-      joystickScale = 0.25;
-    }
-
-  }
-
+  
 
 public void DriveAutonomous(){
 
@@ -138,14 +133,18 @@ public void DriveAutonomous(){
 
     //need to multiply by max RPM 
 
-    rightTalon.set(ControlMode.Velocity, rightMotorSpeed * VELOCITY_UNITS_PER_100MS);
-    leftTalon.set(ControlMode.Velocity, leftMotorSpeed * VELOCITY_UNITS_PER_100MS);
+    // rightTalon.set(ControlMode.Velocity, rightMotorSpeed * VELOCITY_UNITS_PER_100MS);
+    // leftTalon.set(ControlMode.Velocity, leftMotorSpeed * VELOCITY_UNITS_PER_100MS);
    
+    rightTalon.set(-rightMotorSpeed);
+    leftTalon.set(-leftMotorSpeed);
+
     rightVictor.follow(rightTalon);
     leftVictor.follow(leftTalon);
 
-  rightDistance = (rightTalon.getSelectedSensorPosition()) *DISTANCE_PER_ENCODER_PULSE;
-  leftDistance = (leftTalon.getSelectedSensorPosition()) *DISTANCE_PER_ENCODER_PULSE;
+  
+  rightDistance = (rightTalon.getSelectedSensorPosition()) * DISTANCE_PER_ENCODER_PULSE;
+  leftDistance = (leftTalon.getSelectedSensorPosition()) * DISTANCE_PER_ENCODER_PULSE;
 
   
 
@@ -154,7 +153,7 @@ public void DriveAutonomous(){
 
   //1024 count encoders -->  4096 native units per rotation (4X encoder)
 
-  leftDistance *= -1; //invert one side so values are positive 
+  
   averageDistance = (rightDistance + leftDistance) / 2;
 
   SmartDashboard.putNumber("rightDistance", rightDistance);

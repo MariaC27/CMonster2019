@@ -20,7 +20,7 @@ public class DistancePID extends PIDSubsystem {
    */
   public DistancePID() {
     // Intert a subsystem name and PID values here
-    super("DistancePID", 0.03, 0.0, 0);
+    super("DistancePID", 0.08, 0.0, 0);
     //arguments P, I, and D
 
     setAbsoluteTolerance(0.35);

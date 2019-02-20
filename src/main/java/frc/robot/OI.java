@@ -53,11 +53,13 @@ public class OI {
   public JoystickButton setDistance;
   public JoystickButton setAngle;
   public JoystickButton intakeButton;
+  public JoystickButton intakeReverse;
   public JoystickButton shootHatch;
   public JoystickButton retractHatch;
   public JoystickButton launchCatapultButton;
   public JoystickButton retractCatapultButton;
   public JoystickButton quarterSpeedButton;
+  
 
 
 
@@ -70,27 +72,26 @@ public class OI {
     
     setDistance = new JoystickButton(logitech, 1); //check these buttons
     setAngle = new JoystickButton(logitech, 2); //check these buttons 
-    
+
     shootHatch = new JoystickButton(logitech, 6);
     retractHatch = new JoystickButton(logitech, 8);
     launchCatapultButton = new JoystickButton(logitech, 5);
     retractCatapultButton = new JoystickButton(logitech, 7);
 
     intakeButton = new JoystickButton(logitech, 3); 
+    intakeReverse = new JoystickButton(logitech, 4);
     quarterSpeedButton = new JoystickButton(leftJoystick, 1); //on driver joystick 
 
 
     //when the button is pressed, robot should automatically move to setpoint, activating PID control
-    setDistance.whenPressed(new ReachDistance(Robot.calculateDistance()));
-    setAngle.whenPressed(new Turn(Robot.calculateAngle()));
-
-    SmartDashboard.putNumber("distanceFromOI", Robot.calculateDistance());
-    SmartDashboard.putNumber("angleFromOI", Robot.calculateAngle());
+    //button stuff moved into teleopPeriodic
 
 
 
     intakeButton.whileHeld(new IntakeStart());
     intakeButton.whenReleased(new IntakeStop());
+    intakeReverse.whileHeld(new ReverseIntake());
+    intakeReverse.whenReleased(new IntakeStop());
 
     shootHatch.whenPressed(new ShootHatch());
     retractHatch.whenPressed(new RetractHatch());
@@ -98,7 +99,8 @@ public class OI {
     launchCatapultButton.whenPressed(new LaunchCatapult());
     retractCatapultButton.whenPressed(new RetractCatapult());
 
-    quarterSpeedButton.whenPressed(new ToggleQuarterSpeed());
+    quarterSpeedButton.whileHeld(new ToggleQuarterSpeed());
+    quarterSpeedButton.whenReleased(new NoQuarterSpeed());
 
 
 

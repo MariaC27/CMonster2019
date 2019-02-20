@@ -31,6 +31,10 @@ public class IntakeBase extends Subsystem {
     intakeSpark.set(-0.75);
   }
 
+  public void reverseIntake(){
+    intakeSpark.set(0.75);
+  }
+
   public void stopIntake(){
     intakeSpark.set(0);
   }
