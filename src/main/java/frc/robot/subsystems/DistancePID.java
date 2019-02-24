@@ -22,6 +22,7 @@ public class DistancePID extends PIDSubsystem {
     // Intert a subsystem name and PID values here
     super("DistancePID", 0.08, 0.0, 0);
     //arguments P, I, and D
+    //these stupid values need to get it together 
 
     setAbsoluteTolerance(0.35);
     getPIDController().setContinuous(false);
@@ -55,7 +56,7 @@ public class DistancePID extends PIDSubsystem {
     // yourPot.getAverageVoltage() / kYourMaxVoltage;
 
     return DriveBase.averageDistance;
-    //eventually this should return a distance from calculations 
+    //return a distance from calculations 
   }
 
   @Override

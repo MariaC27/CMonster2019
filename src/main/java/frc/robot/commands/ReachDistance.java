@@ -46,7 +46,7 @@ public class ReachDistance extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    distancePID.setSetpoint(-distance); //should be distance 
+    distancePID.setSetpoint(-distance); //should be distance =, can change to hard setpoint 
     headingPID.setSetpoint(0);
     Robot.driveBase.DriveAutonomous();
     check = true; 

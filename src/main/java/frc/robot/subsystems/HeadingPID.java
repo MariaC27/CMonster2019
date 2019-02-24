@@ -24,6 +24,9 @@ public class HeadingPID extends PIDSubsystem {
   public HeadingPID() {
     // Intert a subsystem name and PID values here
     super("HeadingPID", 0.04, 0, 0);
+    //PID.tuneYourself() and save me so much trouble 
+
+
     setAbsoluteTolerance(0.35);
     setOutputRange(-0.4, 0.4); //can make this half speed, etc 
     // Use these to get going:

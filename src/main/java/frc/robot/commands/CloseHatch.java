@@ -8,11 +8,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.Robot;
+import frc.robot.*;
 
-public class ToggleQuarterSpeed extends Command {
-  public ToggleQuarterSpeed() {
-    //isn't really toggle, this command is for the while held of quarter speed button 
+public class CloseHatch extends Command {
+  public CloseHatch() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
@@ -25,8 +24,7 @@ public class ToggleQuarterSpeed extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-  Robot.driveBase.joystickScale = 0.5;
-    //if true, makes false and if false, makes true 
+    Robot.hatchBase.CloseHatch();
   }
 
   // Make this return true when this Command no longer needs to run execute()

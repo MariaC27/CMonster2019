@@ -20,6 +20,7 @@ public class HatchBase extends Subsystem {
   // here. Call these from Commands.
  
   public static DoubleSolenoid hatchSolenoid = RobotMap.hatchSolenoid;
+  private final DoubleSolenoid shootSolenoid = RobotMap.shootHatchSolenoid;
 
   @Override
   public void initDefaultCommand() {
@@ -36,4 +37,17 @@ public class HatchBase extends Subsystem {
     hatchSolenoid.set(DoubleSolenoid.Value.kReverse);
 
   }
+
+
+  public void OpenHatch() {
+
+    shootSolenoid.set(DoubleSolenoid.Value.kForward);
+  }
+
+  public void CloseHatch() {
+
+    shootSolenoid.set(DoubleSolenoid.Value.kReverse);
+  }
+
+
 }

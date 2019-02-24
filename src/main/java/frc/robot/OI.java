@@ -59,6 +59,9 @@ public class OI {
   public JoystickButton launchCatapultButton;
   public JoystickButton retractCatapultButton;
   public JoystickButton quarterSpeedButton;
+  public JoystickButton openHatchButton;
+  public JoystickButton closeHatchButton;
+
   
 
 
@@ -82,6 +85,9 @@ public class OI {
     intakeReverse = new JoystickButton(logitech, 4);
     quarterSpeedButton = new JoystickButton(leftJoystick, 1); //on driver joystick 
 
+    openHatchButton = new JoystickButton(logitech, 9);
+    closeHatchButton = new JoystickButton(logitech, 10);
+
 
     //when the button is pressed, robot should automatically move to setpoint, activating PID control
     //button stuff moved into teleopPeriodic
@@ -101,6 +107,9 @@ public class OI {
 
     quarterSpeedButton.whileHeld(new ToggleQuarterSpeed());
     quarterSpeedButton.whenReleased(new NoQuarterSpeed());
+
+    openHatchButton.whenPressed(new OpenHatch());
+    closeHatchButton.whenPressed(new CloseHatch());
 
 
 

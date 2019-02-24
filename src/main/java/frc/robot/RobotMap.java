@@ -38,6 +38,7 @@ public class RobotMap {
   //coding a solenoid causes a CTRE CAN Timeout if there isn't a pcm on the robot 
    public static DoubleSolenoid hatchSolenoid = new DoubleSolenoid(1,2);
    public static Solenoid launchCatapultSolenoid = new Solenoid(0);
+   public static DoubleSolenoid shootHatchSolenoid = new DoubleSolenoid(3,4);
 
 
   public static Spark intakeSpark = new Spark(0);
